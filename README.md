@@ -1,7 +1,7 @@
 # Simple-Animation-Timeline
 No frills, just a simple zoomable timeline that can be added into a bootstrap template that you can tie other things into.
 
-You can see the demo here: https://ajhalls.github.io/Simple-Animation-Timeline/index.html
+You can see the demo here: https://ajhalls.github.io/Simple-Animation-Timeline-for-Greensock/
 
 I made this because the other libraries I could find were extremely complex (~35,000 lines) and 
 were much more full featured than I could integrate. I wanted to tie it in with database functions and have
