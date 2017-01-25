@@ -1,5 +1,5 @@
 # Simple-Animation-Timeline
-No frills, just a simple zoomable timeline that can be added into a bootstrap template that you can tie other things into.
+No frills, just a simple zoomable timeline that can be added into a bootstrap template that you can tie other things into. This is a little more complicated version of the other timeline: https://github.com/ajhalls/Simple-Animation-Timeline, depending on what you are integrating it with, you may find the other a better starting point.
 
 You can see the demo here: https://ajhalls.github.io/Simple-Animation-Timeline-for-Greensock/
 
@@ -18,4 +18,9 @@ The downside was some were dependant on node / grunt / require.js and were diffi
 add functions / events. The end product for me will end up with full Greensock TweenMax integration, 
 but this should be a decent starting place if you want to do something different.
 
-Zoom by using mouse scroll wheel while over the timeline.
+There is no installation required, just unzip and pull up the index.html. 
+
+Zoom by using mouse scroll wheel while over the timeline or using the slider.
+
+Add animations to the timeline by clicking one of the "+" buttons, wherever your scrubber is set to is where
+it will be inserted to. Still working on modifying the durations / start times using jQuery draggable, but it is a start.
