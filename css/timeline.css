@@ -1,0 +1,53 @@
+
+.scrubber-icon {
+	font-weight: 900;
+    top:-25px;
+    left: -3px;
+    cursor: crosshair;
+}
+.scrubber-icon:after {
+    content:"";
+    position: absolute;
+    left:7px;
+    top:13px;
+    width:3px;
+    height: 120px;
+    background: red;
+    z-index: 9999;
+    cursor: crosshair;
+}
+.timeline_Numbers {
+    position: relative;
+    top:-25px;
+    z-index: 9999;
+}
+.timeline-container{
+	background: #9F9;
+    position: relative;
+      height: 245px;
+}
+.timeline-container-header{
+    position: relative;
+	background: #666;
+    width:100%;
+    height: 30px;
+}
+.timelinePositioning{
+    position: relative;
+    top:-25px;
+    z-index: 9999;
+}
+.timeline-control-buttons{
+    background: #666;
+    width:100%;
+    height: 30px;
+}
+.timelineLayers{
+    background: #DDD;
+    width:100%;  
+}
+.timelineElement{
+    background-color: rgb(137, 128, 209);
+    height: 25px;
+    border-radius: 4.45px;
+}

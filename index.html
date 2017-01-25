@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" />
+</head>
+<BODY>
+<div class="row">
+	<div class="col-sm-2 m-0">Slider test
+	</div>
+	<div class="col-sm-8 m-0 p-0">
+	</div>
+</div>
+<div class="row">
+	<div class="col-sm-2 m-0 p-0">
+	</div>
+	<div class="col-sm-9 m-0 p-0 " id="mouseEvent">
+		<div class="col-sm-1 m-0 p-0 "><h1 class="exampleAnimation" id="exampleAnimation">Example</h1> <span id="progress"></span></div>
+	</div>
+</div><br><BR>
+
+<div class="row">
+	<div class="col-sm-2 m-0 timeline-control-buttons">
+			<span id="playPause" class="btn  btn-primary btn-sm playAnimation">Play</span>
+			<span id="restartBtn" class="btn  btn-primary btn-sm"><i class="fa fa-refresh">&nbsp;</i></span>
+			<span id="AddAnimation" class="btn  btn-primary btn-sm"><i class="fa fa-plus">&nbsp;</i></span>
+			<span id="AddAnimation2" class="btn  btn-primary btn-sm"><i class="fa fa-plus">&nbsp;</i></span>
+			<span id="timelineZoom" class="zoomSlider" style="position:absolute;width:100px;margin-left: 15px;margin-top: 10px;"></span>
+		
+	</div>
+	<div class="col-sm-10  m-0 p-0 timeline-container timeline-container-header">
+		<div id="timeSlider" class="col-sm-12 m-0 p-0"><i class="fa fa-chevron-down scrubber-icon">&nbsp;</i></div>
+		<div class="col-sm-12  m-0 p-0 timelineTicks timelineNumbers timelinePositioning">&nbsp;&nbsp;&nbsp;</div>
+	</div>
+</div>
+<div class="row timelineLayers  m-0"></div><BR><BR>
+Position X:<input id="formAnimationX" type="text"><BR>
+Position Y:<input id="formAnimationY" type="text"><BR>
+Duration: <input id="formAnimationDuration" type="text"><BR>
+<span id="AddManual" class="btn  btn-primary btn-sm"><i class="fa fa-plus">&nbsp;</i></span>
+
+</BODY> 
+   <script src="./plugins/jquery/jquery-3.1.1.min.js"></script>
+    <link rel="stylesheet" href="./plugins/jquery/jquery-ui.css">
+    <script src="./plugins/jquery/jquery-ui.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.19.1/TweenMax.min.js"></script>	
+
+    <link rel="stylesheet" href="./plugins/tether/css/tether.min.css">
+	<script src="./plugins/tether/js/tether.min.js"></script>
+    <link rel="stylesheet" href="./plugins/bootstrap/bootstrap.min.css">
+	<script src="./plugins/bootstrap/bootstrap.min.js"></script>
+
+	<link rel="stylesheet" href="./css/timeline.css">
+	<script src="./js/timeline.js"></script>
+</html>

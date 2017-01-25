@@ -1,0 +1,19 @@
+@import '../assets/globals.postcss.css';
+
+.timeline-panel {
+  position:     relative;
+  top:         -20*$PX;
+  height:       22*$PX;
+  background:   $c-light-purple;
+  box-shadow:   0 2*$PX 4*$PX black;
+}
+
+.label {
+  fill:         $c-white;
+  font-size:    7px;
+}
+
+.main-svg {
+  width:        100%;
+  height:       100%;
+}

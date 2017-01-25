@@ -1,0 +1,44 @@
+@import '../assets/globals.postcss.css';
+
+.point-timeline-line {
+  min-height:   $POINT_LINE_HEIGHT;
+  margin-top:   10*$PX;
+  position:     relative;
+
+  &__inner {
+    display:        inline-block;
+    vertical-align: top;
+  }
+
+  &__header {
+    width:           100%;
+    height:         $POINT_LINE_HEIGHT;
+    background:     $c-creamy;
+    border-radius:  3*$PX;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    opacity:        .2;
+  }
+
+  &__body {
+    height: 0;
+    overflow: hidden;
+  }
+
+  &__property {
+    height:     $POINT_LINE_HEIGHT;
+  }
+
+  &:last-child {
+    padding-bottom: 0;
+  }
+
+  &.is-open {
+    .point-timeline-line {
+      &__body {
+        height: auto;
+        overflow: visible;
+      }
+    }
+  }
+}

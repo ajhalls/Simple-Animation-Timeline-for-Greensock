@@ -1,0 +1,15 @@
+
+@import './colors.postcss.css';
+@import './mixins.postcss.css';
+
+/*$PX:      1/16rem;*/
+$PX:      1px;
+$FPX:     1px;
+$GS:      10*$PX;
+$BRADIUS: 3*$PX;
+
+$LEFT_PANEL_WIDTH: 19.5*$GS; /* old was 165px */
+$POINT_SIZE: 6*$PX;
+
+$TOP_PANELS_SIZE: 22*$PX;
+$PLAYER_SIZE: 4*$GS;

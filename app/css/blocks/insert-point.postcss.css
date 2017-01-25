@@ -1,0 +1,11 @@
+@import '../assets/globals.postcss.css';
+
+.insert-point {
+  position:   absolute;
+  width:      $POINT_SIZE*$PX;
+  height:     $POINT_SIZE*$PX;
+  border-radius: 50%;
+  background: $c-orange;
+  margin-left: -($POINT_SIZE/2)*$PX;
+  margin-top:  -($POINT_SIZE/2)*$PX;
+}
