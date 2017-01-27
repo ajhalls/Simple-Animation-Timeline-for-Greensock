@@ -1,9 +1,18 @@
-
+.scrubberHandle{
+    position: absolute;
+    background: transparent;
+    text-align: center;
+    width:20px;
+    height: 150px;
+    display: inline;
+    cursor: crosshair;    
+    z-index: 99999;    
+}
 .scrubber-icon {
+    position:relative;
 	font-weight: 900;
     top:-25px;
-    left: -3px;
-    cursor: crosshair;
+    left: 0px;
 }
 .scrubber-icon:after {
     content:"";
@@ -18,29 +27,26 @@
 }
 .timeline_Numbers {
     position: relative;
-    top:-25px;
+    top:25px;
     z-index: 9999;
 }
 .timeline-container{
-	background: #9F9;
     position: relative;
-      height: 245px;
 }
 .timeline-container-header{
     position: relative;
 	background: #666;
-    width:100%;
-    height: 30px;
+    height: 25px;
 }
 .timelinePositioning{
     position: relative;
-    top:-25px;
+    top:-3px;
     z-index: 9999;
 }
 .timeline-control-buttons{
     background: #666;
     width:100%;
-    height: 30px;
+    height: 25px;
 }
 .timelineLayers{
     background: #DDD;
@@ -50,4 +56,10 @@
     background-color: rgb(137, 128, 209);
     height: 25px;
     border-radius: 4.45px;
+}
+.timeline-btn{
+    padding: .15rem .5rem;
+    font-weight: 900;
+    font-size: 12px;
+    height: 18px;   
 }

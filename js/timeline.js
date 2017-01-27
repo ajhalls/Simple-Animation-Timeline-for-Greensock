@@ -13,13 +13,15 @@ scrubber = $(".scrubber-icon"),
 buttons = [playBtn, pauseBtn, resumeBtn],
 progressSlider;
 var timelineItems = 0;
-var elementTL = [];
-elementTL[timelineItems] = new TimelineLite();
+var childTL = [];
+childTL[timelineItems] = new TimelineLite({onUpdate:updateSlider});
 var insertTime = 0;
 var scrubberValue= 0;
 var formAnimation = {};
-var targetthing = '$("#exampleAnimation")';
-
+var animationSequence,animationDuration;
+var compiledAnimations=[];
+var targetthing = '.exampleAnimation';
+var startTime = 0 ;
 var greenSockUI = {
   "spin": {"duration": "2", "rotation": "+=360", "ease": "Elastic.easeOut"},
   "teardropBL":  {"duration": "2","borderRadius":"50px 50px 50px 0px"},
@@ -35,8 +37,8 @@ var greenSockUI = {
   "flipInX": [{"duration":"0.2", "transformPerspective": "400", "rotationX": "90", "opacity": "0", "startAt": {"transformPerspective": "400", "opacity": "0", "rotationX": "0"} }, {"duration":"0.2", "transformPerspective": "400", "rotationX": "-20", "startAt": {"transformPerspective": "400", "opacity": "0", "rotationX": "90"} }, {"duration":"0.2", "transformPerspective": "400", "rotationX": "10", "opacity": "1", "startAt": {"transformPerspective": "400", "rotationX": "-20"} }, {"duration":"0.2", "transformPerspective": "400", "rotationX": "-5", "opacity": "1", "startAt": {"transformPerspective": "400", "opacity": "1", "rotationX": "10"} }, {"duration":"0.2", "transformPerspective": "400", "opacity": "1", "rotationX": "0", "startAt": {"transformPerspective": "400", "opacity": "1", "rotationX": "-5"} } ] };
 
 function drawRulers() {
-$(".timelineTicks").html("");
-$(".timelineNumbers").html("");
+    $(".timelineTicks").html("");
+    $(".timelineNumbers").html("");
     for (i = 0; i < timelineLength; i += (10 * 1)) {
         var spacing = (i*Number(ZoomValue)+8);
         var tickMarks = "<span class=\"minorTick\" style=\"position:absolute;width:2px;height:10px;left:"+ spacing +"px;\">|</span>";
@@ -53,42 +55,30 @@ $(".timelineNumbers").html("");
     }
 }
 drawRulers();
-$(".timeline-container").on("wheel", mouseZoom);
+
 $(".timeline-container").on("click", scrubToTime);
-
-
-function mouseZoom(e) {
-    var dir = e.originalEvent.deltaY;
-    if (dir < 0){
-    ZoomValue = (ZoomValue += 0.3);           
-    } else {
-    ZoomValue = (ZoomValue -= 0.3);
-    }
-    drawRulers();
-
-    scrubber.css("left", mainTL.time().toFixed(2)*1000*ZoomValue +"px");
-    e.originalEvent.returnValue = false;
-};
 function scrubToTime(e) {
-    scrubber = $(".scrubber-icon");
-    var clickedTime = e.originalEvent.layerX/ZoomValue-8;
-    scrubber.css({"left": e.originalEvent.layerX-8});
-    console.log(mainTL.time());
-    scrubberValue = ($(".scrubber-icon").position().left-15)/ZoomValue;
-    insertTime = scrubberValue*ZoomValue+10;
+    scrubber = $(".scrubberHandle");
+    var clickedTime = (e.pageX -  $(this).offset().left)/ZoomValue-8;
+    scrubber.css({"left": e.pageX - $(this).offset().left -8});
+    scrubberValue = ($(".scrubberHandle").position().left)/ZoomValue;
+    insertTime = scrubberValue*ZoomValue;
+    progress.html(scrubberValue/1000);
+    mainTL.time(scrubberValue/1000).pause();
+    scrubber.css({"left": e.pageX - $(this).offset().left -8});
     e.originalEvent.returnValue = false;
 };
 
 
 
-$(".scrubber-icon").draggable({ 
+$(".scrubberHandle").draggable({ 
     axis: 'x',
     containment: "parent",
     drag: function( event, ui ) {
-        scrubberValue = ($(".scrubber-icon").position().left-15)/ZoomValue;
+        scrubberValue = ($(".scrubberHandle").position().left)/ZoomValue;
         progress.html(scrubberValue/1000);
          mainTL.time(scrubberValue/1000).pause();
-         insertTime = scrubberValue*ZoomValue+10;
+         insertTime = scrubberValue*ZoomValue;
 
     }
 
@@ -144,13 +134,13 @@ $('#timeScaleSlider').on("slide", function(slideEvt) {
 
 
 $("#AddAnimation").on("click", function(){
-    greenAni(targetthing,  greenSockUI.rotationY);
-
+    compileAnimations(targetthing, greenSockUI.rotationY);
+   greenAni(targetthing,  greenSockUI.rotationY, startTime);
     $(".timelineLayers").append("\
         <div class='col-md-2 m-0'>layer "+timelineItems+"</div>\
         <div class='col-md-10 p-0 m-0'>\
-            <div id ='draggbleElement-"+timelineItems+"' class='timelineElement resizableX draggableX ui-state-active' style='width: "+ elementTL[timelineItems-1].duration()*1000*ZoomValue +"px;'>\
-                greenSockUI.rotationX\
+            <div id ='draggbleElement-"+timelineItems+"' class='timelineElement resizableX draggableX ui-state-active' style='width: "+ childTL[timelineItems-1].duration()*1000*ZoomValue +"px;'>\
+                greenSockUI.rotationY\
             </div>\
         </div>\
     ");
@@ -158,12 +148,13 @@ $("#AddAnimation").on("click", function(){
 reInit();
 });
 $("#AddAnimation2").on("click", function(){
-    greenAni(targetthing,  greenSockUI.rotationX);
+    compileAnimations(targetthing,  greenSockUI.rotationX);
+    greenAni(targetthing,  greenSockUI.rotationX, startTime);
 
     $(".timelineLayers").append("\
         <div class='col-md-2 m-0'>layer "+timelineItems+"</div>\
         <div class='col-md-10 p-0 m-0'>\
-            <div id ='draggbleElement-"+timelineItems+"' class='timelineElement resizableX draggableX ui-state-active' style='width: "+ elementTL[timelineItems-1].duration()*1000*ZoomValue +"px;'>\
+            <div id ='draggbleElement-"+timelineItems+"' class='timelineElement resizableX draggableX ui-state-active' style='width: "+ childTL[timelineItems-1].duration()*1000*ZoomValue +"px;'>\
                 greenSockUI.rotationX\
             </div>\
         </div>\
@@ -176,13 +167,14 @@ $("#AddManual").on("click", function(){
     var formAnimationX = $("#formAnimationX").val();
     var formAnimationY = $("#formAnimationY").val();
     var formAnimationDuration = $("#formAnimationDuration").val();
-    greenAni(targetthing,  {"duration": formAnimationDuration, "x": formAnimationX, "y": formAnimationY, "ease": "Elastic.easeOut"});
+    compileAnimations(targetthing,  {"duration": formAnimationDuration, "x": formAnimationX, "y": formAnimationY, "ease": "Elastic.easeOut"});
+    greenAni(targetthing,  {"duration": formAnimationDuration, "x": formAnimationX, "y": formAnimationY, "ease": "Elastic.easeOut"}, startTime);
 
     $(".timelineLayers").append("\
         <div class='col-md-2 m-0'>layer "+timelineItems+"</div>\
         <div class='col-md-10 p-0 m-0'>\
-            <div id ='draggbleElement-"+timelineItems+"' class='timelineElement resizableX draggableX ui-state-active' style='width: "+ elementTL[timelineItems-1].duration()*1000*ZoomValue +"px;'>\
-                greenSockUI.rotationX\
+            <div id ='draggbleElement-"+timelineItems+"' class='timelineElement resizableX draggableX ui-state-active' style='width: "+ childTL[timelineItems-1].duration()*1000*ZoomValue +"px;'>\
+                greenSockUI.Custom Position\
             </div>\
         </div>\
     ");    
@@ -192,24 +184,53 @@ $("#AddManual").on("click", function(){
     console.log(formAnimationX, formAnimationY);
 });
 function reInit() {
-    mainTL.clear();
-    mainTL = new TimelineLite({onUpdate:updateSlider, paused: true});
-    for(i=0; i<elementTL.length; i++){
-        var startTime = ($("#draggbleElement-"+ (i+1)).position().left)/ZoomValue+12;
-        mainTL.add(elementTL[i], startTime/1000);
+
+    $( ".draggableX" ).draggable({ axis: "x", containment: "parent",
+ stop: function( event, ui ) {
+    var thisID = this.id.split('-');
+    var thisStartTime = $(this).position().left/ZoomValue;
+    thisID = thisID[1]-1;
+    compiledAnimations[thisID]["startTime"] = thisStartTime;
+    rebuildTimeline();
+ }
+ });
+    $( ".resizableX" ).resizable({ handles:"e,w", containment: "parent",
+ stop: function( event, ui ) {
+    var thisID = this.id.split('-');
+    var thisStartTime = $(this).position().left/ZoomValue;
+    var thisDuration = $(this).width()/ZoomValue/1000;
+    thisID = thisID[1]-1;
+    compiledAnimations[thisID]["startTime"] = thisStartTime;
+    compiledAnimations[thisID]["animationDuration"] = thisDuration;
+    rebuildTimeline();
     }
-    
-    $( ".draggableX" ).draggable({ axis: "x", containment: "parent" });
-    $( ".resizableX" ).resizable({ handles:"e,w", containment: "parent"});
-}
+ });
+};
 
 
+function compileAnimations(targetItem,sequence) {
+    resequenceJSON(sequence);
+    startTime = insertTime/ZoomValue;
+    compiledAnimations.push({"itemID" : timelineItems+1, "target":targetItem, "animationSequence":JSON.stringify(animationSequence)});   
+    compiledAnimations[timelineItems]["startTime"] = startTime;
+    compiledAnimations[timelineItems]["animationDuration"] = animationDuration;
 
-function greenAni(targetItem, sequence) {
-    var assembledTimeline = ""
+};
+function greenAni(targetItem, sequence, startTime) {
+    var assembledTimeline = "";
+    resequenceJSON(sequence);
+    assembledTimeline += '.to(' + targetItem + ', ' + animationDuration + ', ' + JSON.stringify(animationSequence) + ')';
+
+                 
+    rebuildTimeline()
+        timelineItems++;
+};
+function resequenceJSON(sequence) {
     var greenAniArray = {options:{}};
+    console.log(sequence);
       if ($.isArray(sequence))
-      {         
+      {           
+ 
           for (S = 0; S < sequence.length; S++) {
              for (var setting in sequence[S]) {
                 if (setting == "duration")
@@ -221,7 +242,6 @@ function greenAni(targetItem, sequence) {
               }
                 animationSequence = greenAniArray["options"];
                 animationDuration = greenAniArray["duration"];
-                assembledTimeline += '.to(' + targetItem + ', ' + animationDuration + ', ' + JSON.stringify(animationSequence) + ')';
           }
       }
       else
@@ -232,30 +252,73 @@ function greenAni(targetItem, sequence) {
         }
         animationSequence = greenAniArray["options"];
         animationDuration = greenAniArray["duration"];
-        assembledTimeline += '.to($(' + targetItem + '), ' + animationDuration + ', ' + JSON.stringify(animationSequence) + ')';
+
       }
-                  
-    elementTL[timelineItems] = new TimelineLite();
-    var TLcurrent = elementTL[timelineItems];
-    var TL = "TLcurrent" + assembledTimeline;
-    eval(TL);
-    timelineItems++;
+}
+function rebuildTimeline() {
+    if ($.isArray(compiledAnimations))
+      {           
+    mainTL.clear();
+    mainTL = new TimelineLite({onUpdate:updateSlider, paused: true});
+    var assembledTimeline = "";
+    childTL = [];
+          for (S = 0; S < compiledAnimations.length; S++) {
+                childTL[S] = new TimelineLite({onUpdate:updateSlider, id:S});
+                sequence = JSON.parse(compiledAnimations[S].animationSequence);
+                childTL[S].to(compiledAnimations[S].target, compiledAnimations[S].animationDuration, sequence);
+                childTL[S].childStartTime = compiledAnimations[S].startTime/1000;
+                childTL[S].childTimeline = childTL[S];
+            }
+
+        for(i=0; i<childTL.length; i++){
+         console.log(childTL[i]);
+           mainTL.add(childTL[i].childTimeline, childTL[i].childStartTime);
+        }
+      }
 };
 
+
+
+
+
+
+$(".timeline-container").on("wheel", mouseZoom);
+function mouseZoom(e) {
+    var dir = e.originalEvent.deltaY;
+    if (dir < 0){
+    ZoomValue = (ZoomValue += 0.2);           
+    } else {
+    ZoomValue = (ZoomValue -= 0.2);
+    }
+    drawRulers();
+    scrubber.css("left", scrubberValue*ZoomValue +"px");
+    $( ".timelineElement" ).each(function( index ) {
+        console.log(compiledAnimations[index].startTime);
+      $( this ).css("width", compiledAnimations[index].animationDuration*1000*ZoomValue +"px");
+      $( this ).css("left", compiledAnimations[index].startTime*ZoomValue +"px");
+    });
+    scrubberValue = ($(".scrubberHandle").position().left)/ZoomValue;
+    insertTime = scrubberValue*ZoomValue;
+    e.originalEvent.returnValue = false;
+};
 $("#timelineZoom").slider({
       range: "max",
-      min: 0.4,
-      max: 5,
+      min: 0.1,
+      max: 0.8,
       step: 0.05,
-      value: 2,
+      value: 0.4,
       slide: function( event, ui ) {
         ZoomValue = ui.value;
         drawRulers();
-        scrubber.css("left", mainTL.time().toFixed(2)*1000*ZoomValue +"px");
-        $(".timelineElement").css("width", mainTL.time().toFixed(2)*1000*ZoomValue +"px");
+        scrubber.css("left", scrubberValue*ZoomValue +"px");
+        $( ".timelineElement" ).each(function( index ) {
+          $( this ).css("width", compiledAnimations[index].animationDuration*1000*ZoomValue +"px");
+          $( this ).css("left", compiledAnimations[index].startTime*ZoomValue +"px");
+        });
+        scrubberValue = ($(".scrubberHandle").position().left)/ZoomValue;
+        insertTime = scrubberValue*ZoomValue; 
       }
     });
-
 
 
 $(".rightClickMenu").hide();
@@ -338,3 +401,40 @@ var updatePseudo = function(){
     }
 }();
 
+function JSONStringify(object) {
+    var cache = [];        
+    var str = JSON.stringify(object,
+        // custom replacer fxn - gets around "TypeError: Converting circular structure to JSON" 
+        function(key, value) {
+            if (typeof value === 'object' && value !== null) {
+                if (cache.indexOf(value) !== -1) {
+                    // Circular reference found, discard key
+                    return;
+                }
+                // Store value in our collection
+                cache.push(value);
+            }
+            return value;
+        }, 4);
+    cache = null; // enable garbage collection
+    return str;
+};
+
+function getChildById(timeline, id) {
+  var tween = timeline._first,
+      sub;
+  while (tween) {
+    if (tween.vars.id === id) {
+      return tween;
+    } else if (!(tween instanceof TweenLite)) {
+      sub = getChildById(tween, id);
+      if (sub) {
+        return sub;
+      }
+    }
+    tween = tween._next;
+  }
+}
+function getAnimationById(id) {
+  return getChildById(com.greensock.core.Animation._rootTimeline, id);
+}

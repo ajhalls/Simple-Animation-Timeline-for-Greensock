@@ -23,15 +23,19 @@
 
 <div class="row">
 	<div class="col-sm-2 m-0 timeline-control-buttons">
-			<span id="playPause" class="btn  btn-primary btn-sm playAnimation">Play</span>
-			<span id="restartBtn" class="btn  btn-primary btn-sm"><i class="fa fa-refresh">&nbsp;</i></span>
-			<span id="AddAnimation" class="btn  btn-primary btn-sm"><i class="fa fa-plus">&nbsp;</i></span>
-			<span id="AddAnimation2" class="btn  btn-primary btn-sm"><i class="fa fa-plus">&nbsp;</i></span>
+			<span id="playPause" class="btn  btn-primary btn-sm playAnimation timeline-btn">Play</span>
+			<span id="restartBtn" class="btn  btn-primary btn-sm timeline-btn"><i class="fa fa-refresh">&nbsp;</i></span>
+			<span id="AddAnimation" class="btn  btn-primary btn-sm timeline-btn"><i class="fa fa-plus">&nbsp;</i>Y</span>
+			<span id="AddAnimation2" class="btn  btn-primary btn-sm timeline-btn"><i class="fa fa-plus">&nbsp;</i>X</span>
 			<span id="timelineZoom" class="zoomSlider" style="position:absolute;width:100px;margin-left: 15px;margin-top: 10px;"></span>
 		
 	</div>
 	<div class="col-sm-10  m-0 p-0 timeline-container timeline-container-header">
-		<div id="timeSlider" class="col-sm-12 m-0 p-0"><i class="fa fa-chevron-down scrubber-icon">&nbsp;</i></div>
+		<div class="scrubberHandle">
+			<i class="fa fa-chevron-down scrubber-icon"></i>
+		</div>
+		<div id="timeSlider" class="col-sm-12 m-0 p-0">
+		</div>
 		<div class="col-sm-12  m-0 p-0 timelineTicks timelineNumbers timelinePositioning">&nbsp;&nbsp;&nbsp;</div>
 	</div>
 </div>
@@ -39,7 +43,7 @@
 Position X:<input id="formAnimationX" type="text"><BR>
 Position Y:<input id="formAnimationY" type="text"><BR>
 Duration: <input id="formAnimationDuration" type="text"><BR>
-<span id="AddManual" class="btn  btn-primary btn-sm"><i class="fa fa-plus">&nbsp;</i></span>
+<span id="AddManual" class="btn  btn-primary btn-sm timeline-btn"><i class="fa fa-plus">&nbsp;</i></span>
 
 </BODY> 
    <script src="./plugins/jquery/jquery-3.1.1.min.js"></script>
