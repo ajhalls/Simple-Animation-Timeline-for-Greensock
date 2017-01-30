@@ -9,7 +9,7 @@ resumeBtn = $("#resumeBtn"),
 time = $("#time"),
 progress = $("#progress"),
 timeScale = $("#timeScale"),
-scrubber = $(".scrubber-icon"),
+scrubber = $(".scrubberHandle"),
 buttons = [playBtn, pauseBtn, resumeBtn],
 progressSlider;
 var timelineItems = 0;
@@ -37,35 +37,37 @@ var greenSockUI = {
   "flipInX": [{"duration":"0.2", "transformPerspective": "400", "rotationX": "90", "opacity": "0", "startAt": {"transformPerspective": "400", "opacity": "0", "rotationX": "0"} }, {"duration":"0.2", "transformPerspective": "400", "rotationX": "-20", "startAt": {"transformPerspective": "400", "opacity": "0", "rotationX": "90"} }, {"duration":"0.2", "transformPerspective": "400", "rotationX": "10", "opacity": "1", "startAt": {"transformPerspective": "400", "rotationX": "-20"} }, {"duration":"0.2", "transformPerspective": "400", "rotationX": "-5", "opacity": "1", "startAt": {"transformPerspective": "400", "opacity": "1", "rotationX": "10"} }, {"duration":"0.2", "transformPerspective": "400", "opacity": "1", "rotationX": "0", "startAt": {"transformPerspective": "400", "opacity": "1", "rotationX": "-5"} } ] };
 
 function drawRulers() {
-    $(".timelineTicks").html("");
-    $(".timelineNumbers").html("");
+    $(".timeline-container-header").html("");
+    $(".timeline-container-header").html("");
     for (i = 0; i < timelineLength; i += (10 * 1)) {
         var spacing = (i*Number(ZoomValue)+8);
         var tickMarks = "<span class=\"minorTick\" style=\"position:absolute;width:2px;height:10px;left:"+ spacing +"px;\">|</span>";
-        $(".timelineTicks").append(tickMarks);
+        $(".timeline-container-header").append(tickMarks);
     }
     // Numbers and red lines
     for (i = 0; i < timelineLength;  i += (100 * 1)) {
         var spacing = (i*Number(ZoomValue)+6);
         var numbers = "<span  style=\"position:absolute;width:2px;height:15px;font-size:9px;top:-10px;left:"+ spacing +"px;\">"+ i +"</span>";
-        $(".timelineNumbers").append(numbers);
+        $(".timeline-container-header").append(numbers);
         var majorLines = "<span class=\"majorTick\" style=\"position:absolute;width:3px;height:20px;color:#f00;font-size:20px;top:-6px;left:"+ spacing +"px;\"><b>|</B></span>";
-        $(".timelineTicks").append(majorLines);
-        $(".timeline-container-header").css("width", i*ZoomValue+150);
+        $(".timeline-container-header").append(majorLines);
+        $(".timeline-container-header").css("width", spacing);
+        $(".timelineTimingPanel").css("width", spacing );
     }
 }
 drawRulers();
 
 $(".timeline-container").on("click", scrubToTime);
 function scrubToTime(e) {
+    console.log("timeline Click");
     scrubber = $(".scrubberHandle");
-    var clickedTime = (e.pageX -  $(this).offset().left)/ZoomValue-8;
-    scrubber.css({"left": e.pageX - $(this).offset().left -8});
+    var clickedTime = (e.pageX -  $(this).offset().left)/ZoomValue-10;
+    scrubber.css({"left": e.pageX - $(this).offset().left -10});
     scrubberValue = ($(".scrubberHandle").position().left)/ZoomValue;
     insertTime = scrubberValue*ZoomValue;
     progress.html(scrubberValue/1000);
     mainTL.time(scrubberValue/1000).pause();
-    scrubber.css({"left": e.pageX - $(this).offset().left -8});
+    scrubber.css({"left": e.pageX - $(this).offset().left -10});
     e.originalEvent.returnValue = false;
 };
 
@@ -76,6 +78,7 @@ $(".scrubberHandle").draggable({
     containment: "parent",
     drag: function( event, ui ) {
         scrubberValue = ($(".scrubberHandle").position().left)/ZoomValue;
+        console.log(scrubberValue);
         progress.html(scrubberValue/1000);
          mainTL.time(scrubberValue/1000).pause();
          insertTime = scrubberValue*ZoomValue;
@@ -136,31 +139,33 @@ $('#timeScaleSlider').on("slide", function(slideEvt) {
 $("#AddAnimation").on("click", function(){
     compileAnimations(targetthing, greenSockUI.rotationY);
    greenAni(targetthing,  greenSockUI.rotationY, startTime);
-    $(".timelineLayers").append("\
-        <div class='col-md-2 m-0'>layer "+timelineItems+"</div>\
-        <div class='col-md-10 p-0 m-0'>\
-            <div id ='draggbleElement-"+timelineItems+"' class='timelineElement resizableX draggableX ui-state-active' style='width: "+ childTL[timelineItems-1].duration()*1000*ZoomValue +"px;'>\
+    $(".timelineTimingPanel").append("\
+        <div class='col-md-12 timelineElementRow'>\
+            <div id ='draggbleElement-"+timelineItems+"' data-animationId='"+timelineItems+"' class='timelineElement resizableX draggableX' style='width: "+ childTL[timelineItems-1].duration()*1000*ZoomValue +"px;'>\
                 greenSockUI.rotationY\
             </div>\
         </div>\
     ");
-    $("#draggbleElement-"+timelineItems).css({"position":"absolute", "left": insertTime});
+    $(".timelineLabels").append("\
+        <div class='col-md-12 m-0 timelineLayerItem'  data-animationId='"+timelineItems+"'>layer "+timelineItems+"</div>\
+    ");
+    $("#draggbleElement-"+timelineItems).css({"position":"relative", "left": insertTime});
 reInit();
 });
 $("#AddAnimation2").on("click", function(){
     compileAnimations(targetthing,  greenSockUI.rotationX);
     greenAni(targetthing,  greenSockUI.rotationX, startTime);
-
-    $(".timelineLayers").append("\
-        <div class='col-md-2 m-0'>layer "+timelineItems+"</div>\
-        <div class='col-md-10 p-0 m-0'>\
-            <div id ='draggbleElement-"+timelineItems+"' class='timelineElement resizableX draggableX ui-state-active' style='width: "+ childTL[timelineItems-1].duration()*1000*ZoomValue +"px;'>\
+    $(".timelineTimingPanel").append("\
+        <div class='col-md-12 timelineElementRow'>\
+            <div id ='draggbleElement-"+timelineItems+"' data-animationId='"+timelineItems+"' class='timelineElement resizableX draggableX' style='width: "+ childTL[timelineItems-1].duration()*1000*ZoomValue +"px;'>\
                 greenSockUI.rotationX\
             </div>\
         </div>\
     ");
-    
-    $("#draggbleElement-"+timelineItems).css({"position":"absolute", "left": insertTime});
+    $(".timelineLabels").append("\
+        <div class='col-md-12 m-0 timelineLayerItem' data-animationId='"+timelineItems+"'>layer "+timelineItems+"</div>\
+    ");
+    $("#draggbleElement-"+timelineItems).css({"position":"relative", "left": insertTime});
 reInit();
 });
 $("#AddManual").on("click", function(){
@@ -170,18 +175,18 @@ $("#AddManual").on("click", function(){
     compileAnimations(targetthing,  {"duration": formAnimationDuration, "x": formAnimationX, "y": formAnimationY, "ease": "Elastic.easeOut"});
     greenAni(targetthing,  {"duration": formAnimationDuration, "x": formAnimationX, "y": formAnimationY, "ease": "Elastic.easeOut"}, startTime);
 
-    $(".timelineLayers").append("\
-        <div class='col-md-2 m-0'>layer "+timelineItems+"</div>\
-        <div class='col-md-10 p-0 m-0'>\
-            <div id ='draggbleElement-"+timelineItems+"' class='timelineElement resizableX draggableX ui-state-active' style='width: "+ childTL[timelineItems-1].duration()*1000*ZoomValue +"px;'>\
-                greenSockUI.Custom Position\
+    $(".timelineTimingPanel").append("\
+        <div class='col-md-12 timelineElementRow'>\
+            <div id ='draggbleElement-"+timelineItems+"' data-animationId='"+timelineItems+"' class='timelineElement resizableX draggableX' style='width: "+ childTL[timelineItems-1].duration()*1000*ZoomValue +"px;'>\
+                greenSockUI.Custom\
             </div>\
         </div>\
-    ");    
-
-    $("#draggbleElement-"+timelineItems).css({"position":"absolute", "left": insertTime});
+    ");
+    $(".timelineLabels").append("\
+        <div class='col-md-12 m-0 timelineLayerItem' data-animationId='"+timelineItems+"'>layer "+timelineItems+"</div>\
+    ");
+    $("#draggbleElement-"+timelineItems).css({"position":"relative", "left": insertTime});
     reInit();
-    console.log(formAnimationX, formAnimationY);
 });
 function reInit() {
 
@@ -205,6 +210,8 @@ function reInit() {
     rebuildTimeline();
     }
  });
+   $(".timelineElement").mousedown(rightClickTimeline); 
+ 
 };
 
 
@@ -257,7 +264,10 @@ function resequenceJSON(sequence) {
 }
 function rebuildTimeline() {
     if ($.isArray(compiledAnimations))
-      {           
+      {      
+    var getPreviousTime = mainTL.time();
+    mainTL.time(0).pause();
+
     mainTL.clear();
     mainTL = new TimelineLite({onUpdate:updateSlider, paused: true});
     var assembledTimeline = "";
@@ -271,19 +281,17 @@ function rebuildTimeline() {
             }
 
         for(i=0; i<childTL.length; i++){
-         console.log(childTL[i]);
            mainTL.add(childTL[i].childTimeline, childTL[i].childStartTime);
         }
       }
+    mainTL.time(getPreviousTime).pause();
+
 };
-
-
-
-
-
 
 $(".timeline-container").on("wheel", mouseZoom);
 function mouseZoom(e) {
+
+    console.log("timeline zoom");
     var dir = e.originalEvent.deltaY;
     if (dir < 0){
     ZoomValue = (ZoomValue += 0.2);           
@@ -302,6 +310,7 @@ function mouseZoom(e) {
     e.originalEvent.returnValue = false;
 };
 $("#timelineZoom").slider({
+      orientation: "vertical",
       range: "max",
       min: 0.1,
       max: 0.8,
@@ -321,14 +330,16 @@ $("#timelineZoom").slider({
     });
 
 
-$(".rightClickMenu").hide();
-$('.rightClickMenu').mousedown(function(event){event.stopPropagation();}); 
-$(".exampleAnimation").mousedown(function(e) {
+$(".rightClickMenuTimeline").hide();
+$('.rightClickMenuTimeline').mousedown(function(event){event.stopPropagation();}); 
+function rightClickTimeline(e) {
+
+         console.log(e.which);
     targetDiv = e.target;
     actionItem = $(e.target).attr("data-animationId");
     switch (e.which) {
        case 1: //left button
-            $( ".rightClickMenu" ).hide();
+            $( ".rightClickMenuTimeline" ).hide();
        break;
         case 3: //right button
 
@@ -339,10 +350,10 @@ $(".exampleAnimation").mousedown(function(e) {
         currentMousePos.y = e.pageY;
 
         //add the actual menu to the body, assign it to the data-menu from before
-        $('.rightClickMenu').css({
+        $('.rightClickMenuTimeline').css({
             "position":"absolute",
-            "z-index":"10000",
-            "border": "6px solid transparent",
+            "z-index":"999999",
+            "border": "6px solid black",
             "padding-top":"4px",
             "top":currentMousePos.y,
             "left":currentMousePos.x
@@ -351,90 +362,14 @@ $(".exampleAnimation").mousedown(function(e) {
         
 
 
-             if ($(e.target).hasClass("exampleAnimation") || $(e.target).hasClass("slider-container"))
+             if ($(e.target).hasClass("timelineElement"))
              {
-                 $( ".rightClickMenu" ).show();
+                 $( ".rightClickMenuTimeline" ).show();
                  window.oncontextmenu = function() { return false };
              }else{
-                $( ".rightClickMenu" ).hide();
+                $( ".rightClickMenuTimeline" ).hide();
                 window.oncontextmenu = function() { return true };
              };
         break;
     }
-}); // close menu if you click on something other than menu
-
-
-/*
-Change the Pseudo Elements on an object
-example: updatePseudo( this, "after", { height: '20px'} );
-*/
-var updatePseudo = function(){
-    
-    var pseudos = {},
-        count = 1,
-        style = document.createElement('style');
-    document.body.appendChild( style );
-    return function( node, type, keyValues ){
-        var id = node.getAttribute('data-has-pseudo');
-        if( !id ){
-            id = count++;
-            node.setAttribute('data-has-pseudo', count);
-        }
-        id = `[data-has-pseudo="${count}"]:${type}`;
-        pseudos[id] = pseudos[id] || {content:''};
-        if( typeof keyValues === 'object' ){
-            for( let key in keyValues ){
-                pseudos[id][key] = keyValues[key];
-            }
-            style.textContent = '';
-            for( let key in pseudos ){
-                style.textContent += `${key}{`
-                for( attr in pseudos[key] ){
-                    style.textContent += `${attr}:${pseudos[key][attr]};`
-                }
-                style.textContent += `};`;
-            }
-            return node;
-        } else if( typeof keyValues === 'string' ){
-            return pseudos[id][keyValues];
-        }
-    }
-}();
-
-function JSONStringify(object) {
-    var cache = [];        
-    var str = JSON.stringify(object,
-        // custom replacer fxn - gets around "TypeError: Converting circular structure to JSON" 
-        function(key, value) {
-            if (typeof value === 'object' && value !== null) {
-                if (cache.indexOf(value) !== -1) {
-                    // Circular reference found, discard key
-                    return;
-                }
-                // Store value in our collection
-                cache.push(value);
-            }
-            return value;
-        }, 4);
-    cache = null; // enable garbage collection
-    return str;
-};
-
-function getChildById(timeline, id) {
-  var tween = timeline._first,
-      sub;
-  while (tween) {
-    if (tween.vars.id === id) {
-      return tween;
-    } else if (!(tween instanceof TweenLite)) {
-      sub = getChildById(tween, id);
-      if (sub) {
-        return sub;
-      }
-    }
-    tween = tween._next;
-  }
-}
-function getAnimationById(id) {
-  return getChildById(com.greensock.core.Animation._rootTimeline, id);
 }

@@ -25,6 +25,35 @@
     z-index: 9999;
     cursor: crosshair;
 }
+.zoomSlider{
+    background-color: #AAA;
+    position:absolute;
+    height: 150px;
+    width:20px;
+    top:25px;
+}
+.zoomSliderContainer{
+    position:relative;
+    background: #666;
+    min-height: 180px;
+    width:20px;
+    top:24px;
+}
+::-webkit-scrollbar-track {
+      background-color: #b46868;
+} /* the new scrollbar will have a flat appearance with the set background color */
+ 
+::-webkit-scrollbar-thumb {
+      background-color: rgba(0, 0, 0, 0.2); 
+} /* this will style the thumb, ignoring the track */
+ 
+::-webkit-scrollbar-button {
+      background-color: #7c2929;
+} /* optionally, you can style the top and the bottom buttons (left and right for horizontal bars) */
+ 
+::-webkit-scrollbar-corner {
+      background-color: black;
+} /* if both the vertical and the horizontal bars appear, then perhaps the right bottom corner also needs to be styled */
 .timeline_Numbers {
     position: relative;
     top:25px;
@@ -32,6 +61,10 @@
 }
 .timeline-container{
     position: relative;
+}
+.timeline-right-panel{
+	min-height: 150px;
+    z-index: 1;
 }
 .timeline-container-header{
     position: relative;
@@ -43,10 +76,17 @@
     top:-3px;
     z-index: 9999;
 }
+.whiteBlock{
+
+    background: #FFF;
+}
 .timeline-control-buttons{
+    position:relative;
     background: #666;
     width:100%;
     height: 25px;
+    padding:0px !important;
+    margin:0px !important;
 }
 .timelineLayers{
     background: #DDD;
@@ -56,10 +96,29 @@
     background-color: rgb(137, 128, 209);
     height: 25px;
     border-radius: 4.45px;
+    border: 1px solid #003eff;
+    z-index: 9999;
+}
+.timelineLayerItem{
+    background-color: #AAA;
+    border-bottom: 1px solid #333;
+    height: 26px;
+}
+.timelineLables{
+    background-color: #AAA;
+    border-bottom: 1px solid #333;
+}
+.timelineElementRow{
+    background-color: #AAA;
+    border-bottom: 1px solid #333;
 }
 .timeline-btn{
     padding: .15rem .5rem;
     font-weight: 900;
     font-size: 12px;
     height: 18px;   
+}
+.rightClickMenuTimeline{
+
+    z-index: 999999;
 }

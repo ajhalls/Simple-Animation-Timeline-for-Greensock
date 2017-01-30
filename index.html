@@ -8,50 +8,98 @@
 </head>
 <BODY>
 
-<div class="row">
-	<div class="col-sm-2 ">
+<div class="row m-0 p-0">
+	<div class="col-md-2">
 	<a href="https://github.com/ajhalls/Simple-Animation-Timeline-for-Greensock">See code on Github<br><img width="100" src="https://s-media-cache-ak0.pinimg.com/736x/2c/b6/70/2cb670b6ddd8922a1c1b2fee4f6f758c.jpg"></a><br> Created by Alan Halls
 	</div>
-	<div class="col-sm-9 m-0 p-0 " id="mouseEvent">
-		<div class="col-sm-1 m-0 p-0 "><h1 class="exampleAnimation" id="exampleAnimation">Example</h1> <span id="progress"></span></div>
-	</div>
-</div><br><BR>
+	<div class="col-md-3 "><h1 class="exampleAnimation" id="exampleAnimation">Example Animation</h1><BR><BR><BR><span id="progress"></span></div>
+	
+</div>
 
-<div class="row">
-	<div class="col-sm-2 m-0 timeline-control-buttons">
+<div class="row m-0 p-0">
+	<div class="col-md-2  m-0 p-0">
+	<!-- This blocks out the numbers as you scroll content left and right-->
+	<div class="whiteBlock"><br></div>
+		<div class="col-md-12 timeline-control-buttons m-0 p-0">
 			<span id="playPause" class="btn  btn-primary btn-sm playAnimation timeline-btn">Play</span>
 			<span id="restartBtn" class="btn  btn-primary btn-sm timeline-btn"><i class="fa fa-refresh">&nbsp;</i></span>
 			<span id="AddAnimation" class="btn  btn-primary btn-sm timeline-btn"><i class="fa fa-plus">&nbsp;</i>Y</span>
-			<span id="AddAnimation2" class="btn  btn-primary btn-sm timeline-btn"><i class="fa fa-plus">&nbsp;</i>X</span>
-			<span id="timelineZoom" class="zoomSlider" style="position:absolute;width:100px;margin-left: 15px;margin-top: 10px;"></span>
-		
+			<span id="AddAnimation2" class="btn  btn-primary btn-sm timeline-btn"><i class="fa fa-plus">&nbsp;</i>X</span><br>
+		</div>
+		<div class="col-sm-12  m-0 p-0 timelineLabels"></div>
 	</div>
-	<div class="col-sm-10  m-0 p-0 timeline-container timeline-container-header">
-		<div class="scrubberHandle">
+<!-- Div between left and right panel-->
+
+	<div class="zoomSliderContainer">
+		<span id="timelineZoom" class="zoomSlider" style=""></span>
+	</div>
+
+	<div id="slidingframe" class="col-md-9 m-0 p-0 timeline-right-panel">
+<br>
+		<div class="col-md-12 scrubberHandle m-0 p-0">
 			<i class="fa fa-chevron-down scrubber-icon"></i>
 		</div>
-		<div id="timeSlider" class="col-sm-12 m-0 p-0">
+		<div class="timeline-container timeline-container-header slidee">
 		</div>
-		<div class="col-sm-12  m-0 p-0 timelineTicks timelineNumbers timelinePositioning">&nbsp;&nbsp;&nbsp;</div>
+		<div class=" timelineTimingPanel"></div>
 	</div>
 </div>
-<div class="row timelineLayers  m-0"></div><BR><BR>
-Position X:<input id="formAnimationX" type="text"><BR>
-Position Y:<input id="formAnimationY" type="text"><BR>
-Duration: <input id="formAnimationDuration" type="text"><BR>
-<span id="AddManual" class="btn  btn-primary btn-sm timeline-btn"><i class="fa fa-plus">&nbsp;</i></span>
+<BR><BR>
+<div class="row m-0 p-0">
+	<div class="col-md-2">
+	Add a manual position change:<br>
+		Position X:<input id="formAnimationX" type="text"><BR>
+		Position Y:<input id="formAnimationY" type="text"><BR>
+		Duration: <input id="formAnimationDuration" type="text"><BR>
+		<span id="AddManual" class="btn  btn-primary btn-sm timeline-btn"><i class="fa fa-plus">&nbsp;</i></span>
+	</div>
+		<div class="col-md-8">
+		I was working on a GUI slider builder and wanted to add some animation options using Greensock but couldn't find any good simple libraries under 30,000 lines of code. I integrating with one of those seemed like I might spend more time working on integration than I would just starting from scratch and so this was born.
+		<br><br>
+		I didn't spend a lot of time on styling it to make it pretty, since that will vary from site to site, but it should be pretty easy to include into any bootstrap container. It depends on Jquery and Bootstrap, along with a horizontal scroll library (mCustomScrollbar) which is included. 
+		<br><br>
+		There is no installation required, just unzip and pull up the index.html.
+		<br><br>
 
+		Zoom by using mouse scroll wheel while over the timeline or using the slider.
+		<br><br>
+
+		Add animations to the timeline by clicking one of the "+" buttons, wherever your scrubber is set to is where it will be inserted to. Durations and start times can be easily modified by dragging and dropping / resizing them.
+		<br><br>
+		At this point I need to start connecting it to the database to populate all the effects / easing and tie it into my main application which means that at least for now this is finished to a point anyone else can use it. 
+		<br><br>
+		I realize it isn't the best starting point for beginners, BUT it is less than 400 lines of javascript as opposed to over 30,000 (and could have been shorter if I removed the example animation data). I also added the start of a right click menu on the timeline, but again, it was time to connect it to the database which makes it time to commit and move on :)
+	</div>
+</div>
+
+
+
+<!-- Right Click panel-->
+	<div class=" rightClickMenuTimeline">
+		Easing Type:<select><option>M</option></select>
+		<span id="AddManual" class="btn  btn-primary btn-sm timeline-btn"><i class="fa fa-plus">&nbsp;</i></span>
+	</div>
 </BODY> 
-   <script src="./plugins/jquery/jquery-3.1.1.min.js"></script>
-    <link rel="stylesheet" href="./plugins/jquery/jquery-ui.css">
-    <script src="./plugins/jquery/jquery-ui.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.19.1/TweenMax.min.js"></script>	
+<script src="./plugins/jquery/jquery-3.1.1.min.js"></script>
+<link rel="stylesheet" href="./plugins/jquery/jquery-ui.css">
+<script src="./plugins/jquery/jquery-ui.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.19.1/TweenMax.min.js"></script>	
 
-    <link rel="stylesheet" href="./plugins/tether/css/tether.min.css">
-	<script src="./plugins/tether/js/tether.min.js"></script>
-    <link rel="stylesheet" href="./plugins/bootstrap/bootstrap.min.css">
-	<script src="./plugins/bootstrap/bootstrap.min.js"></script>
+<link rel="stylesheet" href="./plugins/tether/css/tether.min.css">
+<script src="./plugins/tether/js/tether.min.js"></script>
+<link rel="stylesheet" href="./plugins/bootstrap/bootstrap.min.css">
+<script src="./plugins/bootstrap/bootstrap.min.js"></script>
 
-	<link rel="stylesheet" href="./css/timeline.css">
-	<script src="./js/timeline.js"></script>
+<link rel="stylesheet" href="./css/timeline.css">
+<script src="./js/timeline.js"></script>
+<script src="./plugins/horizontalscroll/jquery.mCustomScrollbar.concat.min.js"></script>
+<link href="./plugins/horizontalscroll/jquery.mCustomScrollbar.css" rel="stylesheet" type="text/css" />
+
+<script type="text/javascript">
+	$(".timeline-right-panel").mCustomScrollbar({
+		axis:"x",
+		theme:"inset-2-dark",
+		scrollbarPosition: "outside"
+	});
+</script>
 </html>
