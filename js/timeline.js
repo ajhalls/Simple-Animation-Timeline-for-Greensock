@@ -20,7 +20,7 @@ var scrubberValue= 0;
 var formAnimation = {};
 var animationSequence,animationDuration;
 var compiledAnimations=[];
-var targetthing = '.exampleAnimation';
+var targetthing = $(".exampleAnimation")[0];
 var startTime = 0 ;
 var greenSockUI = {
   "spin": {"duration": "2", "rotation": "+=360", "ease": "Elastic.easeOut"},
@@ -37,23 +37,38 @@ var greenSockUI = {
   "flipInX": [{"duration":"0.2", "transformPerspective": "400", "rotationX": "90", "opacity": "0", "startAt": {"transformPerspective": "400", "opacity": "0", "rotationX": "0"} }, {"duration":"0.2", "transformPerspective": "400", "rotationX": "-20", "startAt": {"transformPerspective": "400", "opacity": "0", "rotationX": "90"} }, {"duration":"0.2", "transformPerspective": "400", "rotationX": "10", "opacity": "1", "startAt": {"transformPerspective": "400", "rotationX": "-20"} }, {"duration":"0.2", "transformPerspective": "400", "rotationX": "-5", "opacity": "1", "startAt": {"transformPerspective": "400", "opacity": "1", "rotationX": "10"} }, {"duration":"0.2", "transformPerspective": "400", "opacity": "1", "rotationX": "0", "startAt": {"transformPerspective": "400", "opacity": "1", "rotationX": "-5"} } ] };
 
 function drawRulers() {
-    $(".timeline-container-header").html("");
-    $(".timeline-container-header").html("");
+    var timelineHeader = $(".timeline-container-header");
+    var scrubberHandle = $(".scrubberHandle");
+    timelineHeader.html("");
+    timelineHeader.html("");
     for (i = 0; i < timelineLength; i += (10 * 1)) {
-        var spacing = (i*Number(ZoomValue)+8);
-        var tickMarks = "<span class=\"minorTick\" style=\"position:absolute;width:2px;height:10px;left:"+ spacing +"px;\">|</span>";
-        $(".timeline-container-header").append(tickMarks);
+        spacing = (i * Number(ZoomValue) + 18);
+        var tickMarks = "<span class=\"minorTick\" style=\"left:" + spacing + "px;\">|</span>";
+        timelineHeader.append(tickMarks);
     }
     // Numbers and red lines
-    for (i = 0; i < timelineLength;  i += (100 * 1)) {
-        var spacing = (i*Number(ZoomValue)+6);
-        var numbers = "<span  style=\"position:absolute;width:2px;height:15px;font-size:9px;top:-10px;left:"+ spacing +"px;\">"+ i +"</span>";
-        $(".timeline-container-header").append(numbers);
-        var majorLines = "<span class=\"majorTick\" style=\"position:absolute;width:3px;height:20px;color:#f00;font-size:20px;top:-6px;left:"+ spacing +"px;\"><b>|</B></span>";
-        $(".timeline-container-header").append(majorLines);
-        $(".timeline-container-header").css("width", spacing);
-        $(".timelineTimingPanel").css("width", spacing );
+    for (i = 0; i < timelineLength; i += (100 * 1)) {
+        spacing = (i * Number(ZoomValue) + 16);
+        var numbers = "<span class=\"timelineNumbers\" style=\"left:" + spacing + "px;\">" + i + "</span>";
+        timelineHeader.append(numbers);
+        var majorLines = "<span class=\"majorTick\" style=\"left:" + spacing + "px;\"><b>|</B></span>";
+        timelineHeader.append(majorLines);
+        timelineHeader.css("width", spacing + 100);
     }
+    $(".timelineElementRow").css("width", spacing + 100);
+    $(".timeline-container").on("click", scrubToTime);
+    scrubberHandle.draggable({
+        axis: 'x',
+        containment: "parent",
+        drag: function(event, ui) {
+
+            scrubberValue = ($(this).position().left - timelineScrollValueLeft) / ZoomValue;
+            scrubberHandle.css("left", $(this).position().left);
+            progress.html(scrubberValue / 1000);
+            mainTL.time(scrubberValue / 1000).pause();
+            insertTime = scrubberValue * ZoomValue;
+        }
+    });
 }
 drawRulers();
 

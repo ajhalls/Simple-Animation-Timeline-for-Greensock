@@ -54,10 +54,27 @@
 ::-webkit-scrollbar-corner {
       background-color: black;
 } /* if both the vertical and the horizontal bars appear, then perhaps the right bottom corner also needs to be styled */
-.timeline_Numbers {
-    position: relative;
-    top:25px;
-    z-index: 9999;
+.timelineNumbers{
+    position:absolute;
+    color:#000;
+    width:2px;
+    height:25px;
+    font-size:9px;
+    top:-12px;
+}
+.majorTick{
+    position:absolute;
+    width:3px;
+    height:20px;
+    color:#f00;
+    font-size:20px;
+    top:-3px;
+}
+.minorTick{
+    color:#000;
+    position:absolute;
+    width:2px;
+    height:10px;
 }
 .timeline-container{
     position: relative;
